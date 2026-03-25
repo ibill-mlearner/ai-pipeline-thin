@@ -1,10 +1,14 @@
 """Model loading abstraction for the AI pipeline."""
 
 from dataclasses import dataclass
+from inspect import signature
 from pathlib import Path
 from typing import Any
 
-from .dependency_diagnostics import build_transformers_import_error_details
+from .dependency_diagnostics import (
+    build_transformers_import_error_details,
+    ensure_stdlib_logging_available,
+)
 
 
 @dataclass
@@ -28,14 +32,24 @@ class ModelLoader:
     def build(self):
         """Load and return the model instance."""
         try:
+            ensure_stdlib_logging_available()
             from transformers import AutoModelForCausalLM
         except Exception as exc:  # pragma: no cover - environment-dependent imports.
             raise ImportError(build_transformers_import_error_details(exc)) from exc
 
         cache_dir = self._cache_dir()
+        from_pretrained_kwargs: dict[str, Any] = {
+            "device_map": self.device_map,
+            "cache_dir": cache_dir,
+        }
+
+        from_pretrained_signature = signature(AutoModelForCausalLM.from_pretrained)
+        if "dtype" in from_pretrained_signature.parameters:
+            from_pretrained_kwargs["dtype"] = self.torch_dtype
+        else:
+            from_pretrained_kwargs["torch_dtype"] = self.torch_dtype
+
         return AutoModelForCausalLM.from_pretrained(
             self.model_name,
-            torch_dtype=self.torch_dtype,
-            device_map=self.device_map,
-            cache_dir=cache_dir,
+            **from_pretrained_kwargs,
         )
