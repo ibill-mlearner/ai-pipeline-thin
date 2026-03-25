@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     )
     from .messages import Messages
     from .model_inputs import ModelInputs
+    from .hardware_acceleration import HardwareAcceleration
     from .model_loader import ModelLoader
     from .model_name import ModelName
     from .pipeline import AIPipeline
@@ -37,6 +38,7 @@ __all__ = [
     "AIPipeline",
     "AvailableModels",
     "GenerateIds",
+    "HardwareAcceleration",
     "GeneratedIds",
     "IdsBuilder",
     "Messages",
@@ -61,6 +63,7 @@ _EXPORT_MAP = {
     "AIPipeline": (".pipeline", "AIPipeline"),
     "AvailableModels": (".available_models", "AvailableModels"),
     "GenerateIds": (".generate_ids", "GenerateIds"),
+    "HardwareAcceleration": (".hardware_acceleration", "HardwareAcceleration"),
     "GeneratedIds": (".generated_ids", "GeneratedIds"),
     "IdsBuilder": (".interfaces", "IdsBuilder"),
     "Messages": (".messages", "Messages"),
