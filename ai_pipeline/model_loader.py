@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .dependency_diagnostics import build_transformers_import_error_details
+
 
 @dataclass
 class ModelLoader:
@@ -25,7 +27,10 @@ class ModelLoader:
 
     def build(self):
         """Load and return the model instance."""
-        from transformers import AutoModelForCausalLM
+        try:
+            from transformers import AutoModelForCausalLM
+        except Exception as exc:  # pragma: no cover - environment-dependent imports.
+            raise ImportError(build_transformers_import_error_details(exc)) from exc
 
         cache_dir = self._cache_dir()
         return AutoModelForCausalLM.from_pretrained(
