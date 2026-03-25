@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from .dependency_diagnostics import build_transformers_import_error_details
+
 
 @dataclass
 class TokenizerLoader:
@@ -22,7 +24,10 @@ class TokenizerLoader:
 
     def build(self):
         """Load and return the tokenizer instance."""
-        from transformers import AutoTokenizer
+        try:
+            from transformers import AutoTokenizer
+        except Exception as exc:  # pragma: no cover - environment-dependent imports.
+            raise ImportError(build_transformers_import_error_details(exc)) from exc
 
         return AutoTokenizer.from_pretrained(
             self.model_name,
