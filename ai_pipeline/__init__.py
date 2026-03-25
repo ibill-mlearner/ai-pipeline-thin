@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from .model_loader import ModelLoader
     from .model_name import ModelName
     from .pipeline import AIPipeline
+    from .available_models import AvailableModels
     from .prompt import Prompt
     from .response import Response
     from .text import Text
@@ -34,6 +35,7 @@ if TYPE_CHECKING:
 
 __all__ = [
     "AIPipeline",
+    "AvailableModels",
     "GenerateIds",
     "GeneratedIds",
     "IdsBuilder",
@@ -57,6 +59,7 @@ __all__ = [
 
 _EXPORT_MAP = {
     "AIPipeline": (".pipeline", "AIPipeline"),
+    "AvailableModels": (".available_models", "AvailableModels"),
     "GenerateIds": (".generate_ids", "GenerateIds"),
     "GeneratedIds": (".generated_ids", "GeneratedIds"),
     "IdsBuilder": (".interfaces", "IdsBuilder"),

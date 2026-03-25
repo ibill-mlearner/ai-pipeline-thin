@@ -1,3 +1,5 @@
+import json
+
 import ai_pipeline
 
 
@@ -39,6 +41,9 @@ def run_single(prompt: str) -> None:
     )
 
     print(response)
+
+    available_models = ai_pipeline.AvailableModels().build()
+    print(json.dumps(available_models, indent=2))
 
 
 if __name__ == "__main__":
