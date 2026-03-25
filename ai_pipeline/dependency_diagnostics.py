@@ -5,6 +5,7 @@ from __future__ import annotations
 from importlib import metadata, util
 from pathlib import Path
 import sysconfig
+import sys
 
 
 def _safe_package_version(package_name: str) -> str:
@@ -30,6 +31,34 @@ def _is_stdlib_logging_path(logging_origin: Path) -> bool:
     if not stdlib_path:
         return False
     return _is_within(logging_origin, Path(stdlib_path))
+
+
+def ensure_stdlib_logging_available() -> bool:
+    """Force-load stdlib logging module when shadowed by a local package."""
+    current_logging = sys.modules.get("logging")
+    if current_logging is not None and hasattr(current_logging, "StreamHandler"):
+        return False
+
+    stdlib_path = sysconfig.get_paths().get("stdlib")
+    if not stdlib_path:
+        return False
+
+    logging_init = Path(stdlib_path) / "logging" / "__init__.py"
+    if not logging_init.exists():
+        return False
+
+    spec = util.spec_from_file_location(
+        "logging",
+        logging_init,
+        submodule_search_locations=[str(logging_init.parent)],
+    )
+    if spec is None or spec.loader is None:
+        return False
+
+    module = util.module_from_spec(spec)
+    sys.modules["logging"] = module
+    spec.loader.exec_module(module)
+    return True
 
 
 def build_transformers_import_error_details(original_error: Exception) -> str:

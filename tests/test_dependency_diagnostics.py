@@ -6,10 +6,29 @@ from types import SimpleNamespace
 from unittest import TestCase
 from unittest.mock import patch
 
-from ai_pipeline.dependency_diagnostics import build_transformers_import_error_details
+from ai_pipeline.dependency_diagnostics import (
+    build_transformers_import_error_details,
+    ensure_stdlib_logging_available,
+)
 
 
 class DependencyDiagnosticsTests(TestCase):
+    def test_ensure_stdlib_logging_available_reloads_when_broken(self) -> None:
+        fake_loader = SimpleNamespace(exec_module=lambda module: setattr(module, "StreamHandler", object))
+        fake_spec = SimpleNamespace(loader=fake_loader)
+        fake_module = SimpleNamespace()
+
+        with (
+            patch("ai_pipeline.dependency_diagnostics.sys.modules", {"logging": SimpleNamespace()}),
+            patch("ai_pipeline.dependency_diagnostics.sysconfig.get_paths", return_value={"stdlib": r"C:\Python312\Lib"}),
+            patch("ai_pipeline.dependency_diagnostics.Path.exists", return_value=True),
+            patch("ai_pipeline.dependency_diagnostics.util.spec_from_file_location", return_value=fake_spec),
+            patch("ai_pipeline.dependency_diagnostics.util.module_from_spec", return_value=fake_module),
+        ):
+            reloaded = ensure_stdlib_logging_available()
+
+        self.assertTrue(reloaded)
+
     def test_reports_logging_shadow_when_not_in_stdlib(self) -> None:
         with (
             patch(
