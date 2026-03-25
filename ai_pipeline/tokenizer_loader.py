@@ -3,7 +3,6 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from transformers import AutoTokenizer
 
 
 @dataclass
@@ -24,6 +23,8 @@ class TokenizerLoader:
 
     def build(self):
         """Load and return the tokenizer instance."""
+        from transformers import AutoTokenizer
+
         return AutoTokenizer.from_pretrained(
             self.model_name,
             cache_dir=self._cache_dir(),
