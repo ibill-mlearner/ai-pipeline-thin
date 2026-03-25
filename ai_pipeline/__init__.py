@@ -12,7 +12,9 @@ if TYPE_CHECKING:
     from .generate_ids import GenerateIds
     from .generated_ids import GeneratedIds
     from .interfaces import (
+        HardwareAccelerationChecker,
         IdsBuilder,
+        InteractionExecutor,
         MessagesBuilder,
         ModelBuilder,
         ModelInputsBuilder,
@@ -21,9 +23,13 @@ if TYPE_CHECKING:
         ResponseBuilder,
         TextBuilder,
         TokenizerBuilder,
+        help_context,
     )
     from .messages import Messages
     from .model_inputs import ModelInputs
+    from .interaction_service import AIPipelineInteractionService
+    from .request import AIPipelineRequest
+    from .upstream_error import AIPipelineUpstreamError
     from .hardware_acceleration import HardwareAcceleration
     from .model_loader import ModelLoader
     from .model_name import ModelName
@@ -40,7 +46,12 @@ __all__ = [
     "GenerateIds",
     "HardwareAcceleration",
     "GeneratedIds",
+    "HardwareAccelerationChecker",
+    "AIPipelineInteractionService",
+    "AIPipelineRequest",
+    "AIPipelineUpstreamError",
     "IdsBuilder",
+    "InteractionExecutor",
     "Messages",
     "MessagesBuilder",
     "ModelBuilder",
@@ -56,6 +67,7 @@ __all__ = [
     "Text",
     "TextBuilder",
     "TokenizerBuilder",
+    "help_context",
     "TokenizerLoader",
 ]
 
@@ -65,7 +77,12 @@ _EXPORT_MAP = {
     "GenerateIds": (".generate_ids", "GenerateIds"),
     "HardwareAcceleration": (".hardware_acceleration", "HardwareAcceleration"),
     "GeneratedIds": (".generated_ids", "GeneratedIds"),
+    "HardwareAccelerationChecker": (".interfaces", "HardwareAccelerationChecker"),
+    "AIPipelineInteractionService": (".interaction_service", "AIPipelineInteractionService"),
+    "AIPipelineRequest": (".request", "AIPipelineRequest"),
+    "AIPipelineUpstreamError": (".upstream_error", "AIPipelineUpstreamError"),
     "IdsBuilder": (".interfaces", "IdsBuilder"),
+    "InteractionExecutor": (".interfaces", "InteractionExecutor"),
     "Messages": (".messages", "Messages"),
     "MessagesBuilder": (".interfaces", "MessagesBuilder"),
     "ModelBuilder": (".interfaces", "ModelBuilder"),
@@ -81,6 +98,7 @@ _EXPORT_MAP = {
     "Text": (".text", "Text"),
     "TextBuilder": (".interfaces", "TextBuilder"),
     "TokenizerBuilder": (".interfaces", "TokenizerBuilder"),
+    "help_context": (".interfaces", "help_context"),
     "TokenizerLoader": (".tokenizer_loader", "TokenizerLoader"),
 }
 
