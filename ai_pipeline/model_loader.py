@@ -4,8 +4,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from transformers import AutoModelForCausalLM
-
 
 @dataclass
 class ModelLoader:
@@ -27,6 +25,8 @@ class ModelLoader:
 
     def build(self):
         """Load and return the model instance."""
+        from transformers import AutoModelForCausalLM
+
         cache_dir = self._cache_dir()
         return AutoModelForCausalLM.from_pretrained(
             self.model_name,
