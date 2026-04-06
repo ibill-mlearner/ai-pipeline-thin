@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-pipeline-thin"
+version = "0.1.0"
+description = "Composable class-based AI inference pipeline with lightweight import surface"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "ai-pipeline-thin maintainers" }]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ai_pipeline", "ai_pipeline.*", "ai_pipeline_thin", "ai_pipeline_thin.*"]
+exclude = ["tests", "tests.*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
