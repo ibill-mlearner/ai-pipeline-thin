@@ -28,6 +28,14 @@ if TYPE_CHECKING:
     from .messages import Messages
     from .model_inputs import ModelInputs
     from .interaction_service import AIPipelineInteractionService
+    from .ollama_interaction_service import OllamaInteractionService
+    from .ollama_health_service import OllamaHealthService
+    from .ollama_server_service import OllamaServerService
+    from .interface_gateway import AIPipelineInterface
+    from .interaction_job_manager import InteractionJobManager
+    from .interaction_job_record import InteractionJobRecord
+    from .interaction_job_manager_registry import InteractionJobManagerRegistry
+    from .interaction_persistence_runner import InteractionPersistenceRunner
     from .request import AIPipelineRequest
     from .upstream_error import AIPipelineUpstreamError
     from .hardware_acceleration import HardwareAcceleration
@@ -48,6 +56,14 @@ __all__ = [
     "GeneratedIds",
     "HardwareAccelerationChecker",
     "AIPipelineInteractionService",
+    "OllamaInteractionService",
+    "OllamaHealthService",
+    "OllamaServerService",
+    "AIPipelineInterface",
+    "InteractionJobManager",
+    "InteractionJobRecord",
+    "InteractionJobManagerRegistry",
+    "InteractionPersistenceRunner",
     "AIPipelineRequest",
     "AIPipelineUpstreamError",
     "IdsBuilder",
@@ -79,6 +95,14 @@ _EXPORT_MAP = {
     "GeneratedIds": (".generated_ids", "GeneratedIds"),
     "HardwareAccelerationChecker": (".interfaces", "HardwareAccelerationChecker"),
     "AIPipelineInteractionService": (".interaction_service", "AIPipelineInteractionService"),
+    "OllamaInteractionService": (".ollama_interaction_service", "OllamaInteractionService"),
+    "OllamaHealthService": (".ollama_health_service", "OllamaHealthService"),
+    "OllamaServerService": (".ollama_server_service", "OllamaServerService"),
+    "AIPipelineInterface": (".interface_gateway", "AIPipelineInterface"),
+    "InteractionJobManager": (".interaction_job_manager", "InteractionJobManager"),
+    "InteractionJobRecord": (".interaction_job_record", "InteractionJobRecord"),
+    "InteractionJobManagerRegistry": (".interaction_job_manager_registry", "InteractionJobManagerRegistry"),
+    "InteractionPersistenceRunner": (".interaction_persistence_runner", "InteractionPersistenceRunner"),
     "AIPipelineRequest": (".request", "AIPipelineRequest"),
     "AIPipelineUpstreamError": (".upstream_error", "AIPipelineUpstreamError"),
     "IdsBuilder": (".interfaces", "IdsBuilder"),
