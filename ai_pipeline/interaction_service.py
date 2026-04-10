@@ -7,6 +7,7 @@ from typing import Any
 
 from .model_download_service import AIPipelineModelDownloadService
 from .pipeline import AIPipeline
+from .tokenizer_loader import TokenizerLoader
 from .request import AIPipelineRequest
 from .upstream_error import AIPipelineUpstreamError
 
