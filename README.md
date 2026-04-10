@@ -26,6 +26,16 @@ print(health.status())
 ollama = OllamaInteractionService()
 ```
 
+Download-only prefetch is available for admin/cache warmup workflows:
+
+```python
+from ai_pipeline import AIPipelineModelDownloadService
+
+downloader = AIPipelineModelDownloadService()
+payload = downloader.download("Qwen/Qwen2.5-0.5B-Instruct")
+print(payload)
+```
+
 Install from git:
 
 ```bash

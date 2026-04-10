@@ -85,3 +85,50 @@ class InteractionServiceTests(TestCase):
         self.assertEqual(payload["model_id"], "HuggingFaceTB/SmolLM2-360M-Instruct")
         self.assertEqual(payload["response"], "ok")
         self.assertEqual(payload["context"], {"session_id": "abc123"})
+
+    def test_download_model_returns_download_payload(self) -> None:
+        service = AIPipelineInteractionService()
+
+        class FakeDownloadService:
+            def __init__(self, default_provider):
+                self.default_provider = default_provider
+
+            @staticmethod
+            def download(model_id):
+                return {
+                    "provider": "huggingface",
+                    "model_id": model_id,
+                    "status": "downloaded",
+                }
+
+        with patch("ai_pipeline.interaction_service.AIPipelineModelDownloadService", FakeDownloadService):
+            payload = service.download_model("Qwen/Qwen2.5-3B-Instruct")
+
+        self.assertEqual(payload["provider"], "huggingface")
+        self.assertEqual(payload["model_id"], "Qwen/Qwen2.5-3B-Instruct")
+        self.assertEqual(payload["status"], "downloaded")
+
+    def test_download_model_wraps_exception(self) -> None:
+        service = AIPipelineInteractionService()
+
+        class FailingDownloadService:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            @staticmethod
+            def download(*args, **kwargs):
+                raise AIPipelineUpstreamError(
+                    "Model download failed.",
+                    details={
+                        "exception_class": "RuntimeError",
+                        "message": "download boom",
+                        "model_id": "broken/model",
+                    },
+                )
+
+        with patch("ai_pipeline.interaction_service.AIPipelineModelDownloadService", FailingDownloadService):
+            with self.assertRaises(AIPipelineUpstreamError) as raised:
+                service.download_model("broken/model")
+
+        self.assertEqual(raised.exception.details["exception_class"], "RuntimeError")
+        self.assertEqual(raised.exception.details["message"], "download boom")

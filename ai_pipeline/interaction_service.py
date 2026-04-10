@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from .model_download_service import AIPipelineModelDownloadService
 from .pipeline import AIPipeline
 from .request import AIPipelineRequest
 from .upstream_error import AIPipelineUpstreamError
@@ -90,3 +91,13 @@ class AIPipelineInteractionService:
             "response": response_text,
             "context": request.context,
         }
+
+    def download_model(
+        self,
+        model_id: str,
+        *,
+        provider: str = "huggingface",
+    ) -> dict[str, Any]:
+        """Backwards-compatible pass-through to the dedicated download service."""
+        service = AIPipelineModelDownloadService(default_provider=provider)
+        return service.download(model_id=model_id)

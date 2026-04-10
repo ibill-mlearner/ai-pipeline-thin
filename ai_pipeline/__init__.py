@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from .messages import Messages
     from .model_inputs import ModelInputs
     from .interaction_service import AIPipelineInteractionService
+    from .model_download_service import AIPipelineModelDownloadService
     from .ollama_interaction_service import OllamaInteractionService
     from .ollama_health_service import OllamaHealthService
     from .ollama_server_service import OllamaServerService
@@ -56,6 +57,7 @@ __all__ = [
     "GeneratedIds",
     "HardwareAccelerationChecker",
     "AIPipelineInteractionService",
+    "AIPipelineModelDownloadService",
     "OllamaInteractionService",
     "OllamaHealthService",
     "OllamaServerService",
@@ -95,6 +97,7 @@ _EXPORT_MAP = {
     "GeneratedIds": (".generated_ids", "GeneratedIds"),
     "HardwareAccelerationChecker": (".interfaces", "HardwareAccelerationChecker"),
     "AIPipelineInteractionService": (".interaction_service", "AIPipelineInteractionService"),
+    "AIPipelineModelDownloadService": (".model_download_service", "AIPipelineModelDownloadService"),
     "OllamaInteractionService": (".ollama_interaction_service", "OllamaInteractionService"),
     "OllamaHealthService": (".ollama_health_service", "OllamaHealthService"),
     "OllamaServerService": (".ollama_server_service", "OllamaServerService"),
