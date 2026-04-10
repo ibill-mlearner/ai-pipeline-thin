@@ -5,7 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from .model_loader import ModelLoader
 from .pipeline import AIPipeline
+from .tokenizer_loader import TokenizerLoader
 from .request import AIPipelineRequest
 from .upstream_error import AIPipelineUpstreamError
 
@@ -89,4 +91,41 @@ class AIPipelineInteractionService:
             "model_id": model_id,
             "response": response_text,
             "context": request.context,
+        }
+
+    def download_model(
+        self,
+        model_id: str,
+        *,
+        provider: str = "huggingface",
+    ) -> dict[str, Any]:
+        """Download and cache model/tokenizer artifacts without running generation."""
+        try:
+            model_loader = ModelLoader(
+                model_name=model_id,
+                device_map=None,
+                torch_dtype="auto",
+                download_locally=True,
+            )
+            tokenizer_loader = TokenizerLoader(
+                model_name=model_id,
+                download_locally=True,
+            )
+
+            model_loader.build()
+            tokenizer_loader.build()
+        except Exception as exc:
+            raise AIPipelineUpstreamError(
+                "Model download failed.",
+                details={
+                    "exception_class": exc.__class__.__name__,
+                    "message": str(exc),
+                    "model_id": model_id,
+                },
+            ) from exc
+
+        return {
+            "provider": provider,
+            "model_id": model_id,
+            "status": "downloaded",
         }
